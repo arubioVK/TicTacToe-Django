@@ -15,7 +15,7 @@ Game TicTacToe in Django
 ### Deploy
 
 This application is prepared with **Docker**. We have two components, the application and the database. Just Run
-	```
+```
  docker-compose up
  ```
 
@@ -61,7 +61,9 @@ Response
 ```
 200 OK
 ```
+
 ### Play Match
+
 Request
 ```
 curl --location --request POST 'http://localhost:8000/tictactoe_app/match-play/1/' \
@@ -72,7 +74,10 @@ Response
 ```
 200 OK
 ```
+
 ### Detail Match
+
+
 Request
 ```
 curl --location 'http://localhost:8000/tictactoe_app/match-detail/1/' \
@@ -81,11 +86,21 @@ curl --location 'http://localhost:8000/tictactoe_app/match-detail/1/' \
 
 Response
 ```
-curl --location 'http://localhost:8000/tictactoe_app/match-detail/1/' \
---header 'Authorization: Token xxxx'
+{
+    "id": 1,
+    "X": "player1",
+    "O": "player2",
+    "turn": 10,
+    "finish": true,
+    "winner": "player1",
+    "board_row0": "X | O | O",
+    "board_row1": "O | X | X",
+    "board_row2": "- | O | X"
+}
 ```
 
 ### Statistics
+
 Request
 ```
 curl --location 'http://localhost:8000/tictactoe_app/matches-statistics/' \
