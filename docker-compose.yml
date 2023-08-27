@@ -1,0 +1,25 @@
+version: '2'
+services:
+  postgres:
+    container_name: local_postgres
+    image: 'postgres:latest'
+    restart: always
+    volumes:
+    - './postgres_data:/var/lib/postgresql/data'
+    environment:
+    - POSTGRES_DB=db_tictactoe
+    - POSTGRES_USER=user_postgres
+    - POSTGRES_PASSWORD=pass_postgres
+    ports:
+    - '5432:5432'
+  web:
+    build: ./django
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./django:/code
+    ports:
+      - 8000:8000
+    restart: always
+    depends_on:
+      - postgres
+
