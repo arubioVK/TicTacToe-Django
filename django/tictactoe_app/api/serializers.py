@@ -96,7 +96,8 @@ class MatchPlaySerializer(serializers.ModelSerializer):
         if not(self.instance.player1==self.context['request'].user or self.instance.player2==self.context['request'].user):
             raise serializers.ValidationError('Can not play')
 
-        if not((self.instance.turn%2==0 and self.instance.player2==self.context['request'].user) or (self.instance.turn%1==0 and self.instance.player1==self.context['request'].user)):
+
+        if not((self.instance.turn%2==1 and self.instance.player1==self.context['request'].user) or (self.instance.turn%2==0 and self.instance.player2==self.context['request'].user)):
             raise serializers.ValidationError('Can not move, it´s not your turn')
 
         if self.instance.__dict__['row'+str(data['row'])+'column'+str(data['column'])+'_id'] is not None:
