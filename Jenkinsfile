@@ -11,7 +11,7 @@
 
             stage('Test') {
                 steps {
-                    sh 'python django/manage.py test ./django'
+                    sh 'python django/manage.py test ./django --no-input'
                 }
             }
 
