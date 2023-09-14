@@ -81,9 +81,7 @@ WSGI_APPLICATION = 'restbase.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-is_test = "manage.py" in sys.argv and "test" in sys.argv
-
-if is_test:
+if "test" in sys.argv:
     DATABASES ={
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
