@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+import environ, sys, os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -81,16 +81,26 @@ WSGI_APPLICATION = 'restbase.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': env('DJANGO_DATABASE_ENGINE'),
-        'NAME': env('DJANGO_DATABASE_NAME'), 
-        'USER': env('DJANGO_DATABASE_USER'), 
-        'PASSWORD': env('DJANGO_DATABASE_PASSWORD'),
-        'HOST': env('DJANGO_DATABASE_HOST'), 
-        'PORT': env('DJANGO_DATABASE_PORT'),
+is_test = "manage.py" in sys.argv and "test" in sys.argv
+
+if is_test:
+    DATABASES ={
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': env('DJANGO_DATABASE_ENGINE'),
+            'NAME': env('DJANGO_DATABASE_NAME'), 
+            'USER': env('DJANGO_DATABASE_USER'), 
+            'PASSWORD': env('DJANGO_DATABASE_PASSWORD'),
+            'HOST': env('DJANGO_DATABASE_HOST'), 
+            'PORT': env('DJANGO_DATABASE_PORT'),
+        }
+    }
 
 AUTH_USER_MODEL = "users_app.User"
 
