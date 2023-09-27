@@ -1,11 +1,10 @@
-version: '2'
+version: '3.8'
 services:
   postgres:
-    container_name: local_postgres
     image: 'postgres:latest'
     restart: always
     volumes:
-    - './postgres_data:/var/lib/postgresql/data'
+    - 'postgres_data:/var/lib/postgresql/data'
     environment:
     - POSTGRES_DB=db_tictactoe
     - POSTGRES_USER=user_postgres
@@ -14,12 +13,27 @@ services:
     - '5432:5432'
   web:
     build: ./django
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && gunicorn restbase.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - ./django:/code
-    ports:
-      - 8000:8000
+      - static_volume:/code/staticfiles
+      - media_volume:/code/mediafiles
+    expose:
+      - 8000
     restart: always
     depends_on:
       - postgres
-
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/code/staticfiles
+      - media_volume:/code/mediafiles
+    ports:
+      - 80:80
+    restart: always
+    depends_on:
+      - web
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
